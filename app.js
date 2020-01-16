@@ -23,18 +23,26 @@ var UIController = (function () {
                 description: document.querySelector(DOMstrings.inputDescription).value,
                 value: document.querySelector(DOMstrings.inputValue).value
             }
-
         },
         getDOMstrings: function () {
             return DOMstrings;
         }
     }
-
 })();
 
 //Global App Controller 
 var controller = (function (budgetCtrl, UICtrl) {
-    var DOM = UICtrl.getDOMstrings();
+    var setupEventListeners = function () {
+        var DOM = UICtrl.getDOMstrings();
+        document.querySelector(DOM.inputBtn).addEventListener("click", ctrlAddItem);
+
+        document.addEventListener('keypress', (event) => {
+            if (event.keyCode === 13 || event.which === 13) {
+                ctrlAddItem();
+            }
+        });
+    }
+
     var ctrlAddItem = () => {
         // 1. Get the filed input data 
         var input = UICtrl.getInput();
@@ -43,13 +51,12 @@ var controller = (function (budgetCtrl, UICtrl) {
         // 3. Add the item to UI
         // 4. Calculate the budget
         // 5. Displau the budget on the UI
-    }
-
-    document.querySelector(DOM.inputBtn).addEventListener("click", ctrlAddItem());
-
-    document.addEventListener('keypress', (event) => {
-        if (event.keyCode === 13 || event.which === 13) {
-            ctrlAddItem();
+    };
+    return {
+        init: function () {
+            setupEventListeners();
         }
-    });
+    }
 })(budgetController, UIController);
+
+controller.init();
