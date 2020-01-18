@@ -1,9 +1,31 @@
 //Budget Controller
 
 var budgetController = (function () {
-    // code here
-})();
+    
+    var Expense = function (id, description, vale) {
+        this.id = id;
+        this.description = description;
+        this.value = value;
+    }
 
+    var Income = function (id, description, vale) {
+        this.id = id;
+        this.description = description;
+        this.value = value;
+    }
+
+    var data = {
+        allItems: {
+            exp: [],
+            inc:[]
+        },
+        totals: {
+            exp: 0,
+            inc:0
+        }
+    }
+
+})();
 
 // UI controller 
 var UIController = (function () {
@@ -15,7 +37,7 @@ var UIController = (function () {
         inputValue: '.add__value',
         inputBtn: '.add__btn'
     }
-
+    
     return {
         getInput: function () {
             return {
