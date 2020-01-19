@@ -1,5 +1,4 @@
 //Budget Controller
-
 var budgetController = (function () {
     var Expense = function (id, description, value) {
         this.id = id;
@@ -26,14 +25,12 @@ var budgetController = (function () {
     return {
         addItem: function (type, des, val) {
             var newItem, ID;
-
             // Create new id
             if (data.allItems[type].length > 0) {
                 ID = data.allItems[type][data.allItems[type].length - 1].id + 1;
             } else {
                 ID = 0;
             }
-
             // Create new item base on type (inc or exp)
             if (type === "exp") {
                 newItem = new Expense(ID, des, val);
@@ -42,7 +39,6 @@ var budgetController = (function () {
             }
             // Push it into our data structure
             data.allItems[type].push(newItem);
-
             //return new element
             return newItem;
         },
@@ -56,19 +52,19 @@ var budgetController = (function () {
 var UIController = (function () {
     //Store the input class
     var DOMstrings = {
-      inputType: ".add__type",
-      inputDescription: ".add__description",
-      inputValue: ".add__value",
-      inputBtn: ".add__btn",
-      incomeContainer: ".income__list",
-      expensesContainer: ".expenses__list"
+        inputType: ".add__type",
+        inputDescription: ".add__description",
+        inputValue: ".add__value",
+        inputBtn: ".add__btn",
+        incomeContainer: ".income__list",
+        expensesContainer: ".expenses__list"
     };
     return {
-        getInput: function () {
+        getInput: function () { 
             return {
                 type: document.querySelector(DOMstrings.inputType).value, // will be either cong or tru;
                 description: document.querySelector(DOMstrings.inputDescription).value,
-                value: document.querySelector(DOMstrings.inputValue).value
+                value: parseFloat(document.querySelector(DOMstrings.inputValue).value)
             };
         },
         addListItem: function (obj, type) {
@@ -103,19 +99,19 @@ var UIController = (function () {
             newHtml = newHtml.replace("%description%", obj.description);
             newHtml = newHtml.replace("%value%", obj.value);
             // Insert the HTML into the DOM
-            document
-              .querySelector(element)
-              .insertAdjacentHTML("beforeend", newHtml);
+            document.querySelector(element).insertAdjacentHTML("beforeend", newHtml);
         },
         clearFields: function () {
             var fields, fieldArr;
-            fields = document.querySelectorAll(DOMstrings.inputDescription + ',' + DOMstrings.inputValue);
+            fields = document.querySelectorAll(
+                DOMstrings.inputDescription + "," + DOMstrings.inputValue
+            );
 
-            fieldArr = Array.prototype.slice.call(fields)
-            
-            fieldArr.forEach((current) => {
+            fieldArr = Array.prototype.slice.call(fields);
+
+            fieldArr.forEach(current => {
                 current.value = "";
-            })
+            });
             fieldArr[0].focus();
         },
 
@@ -138,20 +134,31 @@ var controller = (function (budgetCtrl, UICtrl) {
         });
     };
 
+    var updateBuget = function () {
+        // 4. Calculate the budget
+        // 5. return the Budget
+        // 6. Display the budget on the UI
+    };
+
     var ctrlAddItem = () => {
         var input, newItem;
         // 1. Get the filed input data
         input = UICtrl.getInput();
-        // 2. Add the item to the budget
+        if (input.description !== "" && !isNaN(input.value) && input.value > 0) {
+            // 2. Add the item to the budget
         newItem = budgetCtrl.addItem(input.type, input.description, input.value);
 
         // 3. Add the item to UI
         UICtrl.addListItem(newItem, input.type);
-        //3.1 Clear the field
+        //4 Clear the field
         UICtrl.clearFields();
-        // 4. Calculate the budget
-        // 5. Displau the budget on the UI
+
+        // Calculate the budget
+        updateBuget();
+        }
+        
     };
+
     return {
         init: function () {
             setupEventListeners();
