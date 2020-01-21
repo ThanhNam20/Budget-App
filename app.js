@@ -168,6 +168,11 @@ var UIController = (function () {
             });
             fieldArr[0].focus();
         },
+        deteleListItem: function (selectorID) {
+            var el;
+            el = document.getElementById(selectorID);
+            el.parentNode.removeChild(el);
+        },
 
         displayBudget: function (obj) {
             document.querySelector(DOMstrings.budgetLabel).textContent = obj.budget;
@@ -247,8 +252,9 @@ var controller = (function (budgetCtrl, UICtrl) {
             // 1.Detele the item from the data structure
             budgetCtrl.deteleItem(type, ID);
             //2.Detele the item from the UI
-
+            UICtrl.deteleListItem(itemID);
             // 3. UPdate and show the new budget 
+            updateBuget();
         }
         
     }
