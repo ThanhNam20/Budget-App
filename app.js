@@ -13,7 +13,7 @@ var budgetController = (function () {
         } else {
             this.percentage = -1;
         }
-        
+
     };
 
     Expense.prototype.getPercentage = function () {
@@ -98,7 +98,7 @@ var budgetController = (function () {
                 current.calcPercentage(data.totals.inc);
             })
         },
- 
+
         getPercentages: function () {
             var allPerc = data.allItems.exp.map(function (current) {
                 return current.getPercentage()
@@ -135,7 +135,8 @@ var UIController = (function () {
         expensesLabel: ".budget__expenses--value",
         percentageLabel: ".budget__expenses--percentage",
         container: ".container",
-        expensesPercLabel:'.item__percentage'
+        expensesPercLabel: '.item__percentage',
+        dateLabel: ".budget__title--month"
     };
     return {
         getInput: function () {
@@ -227,6 +228,28 @@ var UIController = (function () {
                 current.textContent = percentages[index] + "%";
             });
         },
+
+        displayMonth: function () {
+            var now, year, month,months;
+            now = new Date();
+            months = [
+              "January",
+              "February",
+              "March",
+              "April",
+              "May",
+              "June",
+              "July",
+              "August",
+              "September",
+              "October",
+              "November",
+              "December"
+            ];
+            month = now.getMonth();
+            year = now.getFullYear();
+            document.querySelector(DOMstrings.dateLabel).textContent =months[month]+ ' - '+ year;
+        },
         getDOMstrings: function () {
             return DOMstrings;
         }
@@ -300,10 +323,13 @@ var controller = (function (budgetCtrl, UICtrl) {
             // 3. UPdate and show the new budget 
             updateBuget();
         }
-
     }
+
+    //var formatNum = UICtrl.formatNumber();
+
     return {
         init: function () {
+            UICtrl.displayMonth();
             UICtrl.displayBudget({
                 budget: 0,
                 totalInc: 0,
