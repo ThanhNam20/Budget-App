@@ -138,6 +138,12 @@ var UIController = (function () {
         expensesPercLabel: '.item__percentage',
         dateLabel: ".budget__title--month"
     };
+
+    var nodeListForEach = function(list, callback) {
+      for (var i = 0; i < list.length; i++) {
+        callback(list[i], i);
+      }
+    };
     return {
         getInput: function () {
             return {
@@ -219,11 +225,7 @@ var UIController = (function () {
         },
         displayPercentage: function (percentages) {
             var fields = document.querySelectorAll(DOMstrings.expensesPercLabel);
-            var nodeListForEach = function (list, callback) {
-                for (var i = 0; i < list.length; i++) {
-                    callback(list[i], i);
-                }
-            };
+            
             nodeListForEach(fields, function (current, index) {
                 current.textContent = percentages[index] + "%";
             });
@@ -250,6 +252,14 @@ var UIController = (function () {
             year = now.getFullYear();
             document.querySelector(DOMstrings.dateLabel).textContent =months[month]+ ' - '+ year;
         },
+        changeType: function () {
+            var fields = document.querySelectorAll(
+                DOMstrings.inputType + ',' + DOMstrings.inputDescription + "," + DOMstrings.inputValue);
+            nodeListForEach(fields, function (cur) {
+                cur.classList.toggle('red-focus');
+            })
+            document.querySelector(DOMstrings.inputBtn).classList.toggle('red');
+        },
         getDOMstrings: function () {
             return DOMstrings;
         }
@@ -269,6 +279,10 @@ var controller = (function (budgetCtrl, UICtrl) {
         });
 
         document.querySelector(DOM.container).addEventListener('click', ctrlDeteleItem);
+
+        document
+          .querySelector(DOM.inputType)
+          .addEventListener("change", UICtrl.changeType);
     };
 
     var updateBuget = function () {
@@ -305,7 +319,6 @@ var controller = (function (budgetCtrl, UICtrl) {
             //6. Calculate and update percentages
             updatePercentages();
         }
-
     };
 
     var ctrlDeteleItem = function (event) {
@@ -324,8 +337,6 @@ var controller = (function (budgetCtrl, UICtrl) {
             updateBuget();
         }
     }
-
-    //var formatNum = UICtrl.formatNumber();
 
     return {
         init: function () {
